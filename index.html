@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- BACKGROUND PATTERN -->
+  <div class="bg-pattern" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- THEME TOGGLE -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <span class="toggle-icon">☀</span>
+  </button>
+
+  <div class="layout">
+
+    <!-- GREETING -->
+    <header class="card greeting-card">
+      <p class="date-label" id="dateDisplay"></p>
+      <div class="time-display" id="timeDisplay">00:00:00</div>
+      <h1 class="greeting-text" id="greetingText">Hello!</h1>
+      <p class="user-name" id="userNameDisplay"></p>
+      <div class="name-edit-area" id="nameEditArea">
+        <input type="text" id="nameInput" placeholder="Enter your name…" maxlength="30" />
+        <button id="saveNameBtn" class="btn btn-primary">Save</button>
+      </div>
+      <button class="edit-name-btn" id="editNameBtn">✎ set name</button>
+    </header>
+
+    <!-- MAIN GRID -->
+    <div class="main-grid">
+
+      <!-- FOCUS TIMER -->
+      <section class="card timer-card">
+        <h2 class="card-title">Focus Timer</h2>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-mode-label" id="timerModeLabel">Pomodoro</div>
+        <div class="timer-controls">
+          <button class="btn btn-primary" id="startBtn">Start</button>
+          <button class="btn btn-ghost" id="stopBtn">Stop</button>
+          <button class="btn btn-ghost" id="resetBtn">Reset</button>
+        </div>
+        <div class="pomodoro-settings">
+          <label class="settings-label">Custom Duration (min)</label>
+          <div class="duration-row">
+            <input type="number" id="customMinutes" min="1" max="120" value="25" />
+            <button class="btn btn-accent" id="applyDurationBtn">Apply</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TO-DO LIST -->
+      <section class="card todo-card">
+        <div class="todo-header">
+          <h2 class="card-title">Tasks</h2>
+          <div class="sort-controls">
+            <label class="settings-label">Sort</label>
+            <select id="sortSelect">
+              <option value="default">Default</option>
+              <option value="az">A → Z</option>
+              <option value="za">Z → A</option>
+              <option value="done-last">Done Last</option>
+              <option value="done-first">Done First</option>
+            </select>
+          </div>
+        </div>
+        <div class="task-input-row">
+          <input type="text" id="taskInput" placeholder="Add a new task…" maxlength="100" />
+          <button class="btn btn-primary" id="addTaskBtn">Add</button>
+        </div>
+        <ul class="task-list" id="taskList"></ul>
+        <p class="empty-state" id="emptyState">No tasks yet. Add one above!</p>
+      </section>
+
+      <!-- CALENDAR + DEADLINES — full width -->
+      <section class="card calendar-card">
+        <div class="calendar-top">
+
+          <!-- Left: Calendar -->
+          <div class="calendar-left">
+            <div class="calendar-header-row">
+              <h2 class="card-title" style="margin-bottom:0">Calendar</h2>
+              <div class="cal-nav">
+                <button class="cal-nav-btn" id="prevMonth">&#8249;</button>
+                <span class="cal-month-label" id="calMonthLabel"></span>
+                <button class="cal-nav-btn" id="nextMonth">&#8250;</button>
+              </div>
+            </div>
+            <div class="cal-day-names">
+              <span>Sun</span><span>Mon</span><span>Tue</span>
+              <span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+
+          <!-- Right: Deadlines panel -->
+          <div class="calendar-right">
+            <h2 class="card-title">Deadlines</h2>
+
+            <div class="deadline-add-area">
+              <label class="settings-label">Add New Deadline</label>
+              <div class="deadline-input-col">
+                <input type="text" id="deadlineTitle" placeholder="Task / Assignment name…" maxlength="60" />
+                <div class="deadline-date-row">
+                  <input type="date" id="deadlineDate" />
+                  <button class="btn btn-accent" id="addDeadlineBtn">+ Add</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="deadline-list-wrap">
+              <label class="settings-label">Upcoming</label>
+              <ul class="deadline-list" id="deadlineList"></ul>
+              <p class="empty-state" id="emptyDeadlines">No deadlines yet.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- QUICK LINKS -->
+      <section class="card links-card">
+        <h2 class="card-title">Quick Links</h2>
+        <div class="link-input-row">
+          <input type="text" id="linkNameInput" placeholder="Name" maxlength="20" />
+          <input type="text" id="linkUrlInput" placeholder="https://…" maxlength="200" />
+          <button class="btn btn-primary" id="addLinkBtn">+ Add</button>
+        </div>
+        <div class="links-grid" id="linksGrid"></div>
+        <p class="empty-state" id="emptyLinks">No links yet.</p>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- DAY POPUP -->
+  <div class="day-popup-overlay hidden" id="dayPopupOverlay">
+    <div class="day-popup">
+      <div class="day-popup-header">
+        <span class="day-popup-title" id="dayPopupTitle"></span>
+        <button class="day-popup-close" id="dayPopupClose">✕</button>
+      </div>
+      <ul class="day-popup-list" id="dayPopupList"></ul>
+      <p class="empty-state" id="dayPopupEmpty" style="display:none">No deadlines on this day.</p>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
